@@ -1,37 +1,76 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+  let file: File | null = null;
+  let error = '';
+
+  function handleSubbmit(event) {
+    // Reset the error message
+    error = '';
+
+    // Check if a file is selected
+    if (!file) {
+      error = 'Please select a file before submitting.';
+      return;
+    }
+
+    // Check the file extension (HEIC)
+    const validExtension = /(\.heic)$/i;
+    if (!validExtension.test(file.name)) {
+      error = 'Only HEIC files are allowed.';
+      return;
+    }
+
+    // Check the file size (max 1MB)
+    const maxSize = 1 * 1024 * 1024; // 1MB in bytes
+    if (file.size > maxSize) {
+      error = 'File size must be 1MB or less.';
+      return;
+    }
+
+    // Dispatch the file data to a parent component or handle as needed
+    dispatch('submit', { file });
+  }
+
+  function handleFileChange(event) {
+    file = event.target.files[0];
+    error = ''; // Clear the error if a file is selected
+  }
 </script>
 
-<div class="flex items-center justify-center w-full">
-  <label
-    for="dropzone-file"
-    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-  >
-    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-      <svg
-        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 20 16"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-        />
-      </svg>
-      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-        <span class="font-semibold">Click to upload</span> or drag and drop
-      </p>
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        put your HEIC file extension here...
-      </p>
-    </div>
-    <input id="dropzone-file" type="file" class="hidden" />
-  </label>
+<!-- 
+    Component Source: https://flowbite.com/docs/forms/file-input/
+-->
+
+<div>
+  <form on:submit|preventDefault={handleSubbmit}>
+    <label
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      for="file_input">Upload file</label
+    >
+    <input
+      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none py-2 px-2"
+      id="file_input"
+      type="file"
+      on:change={handleFileChange}
+    />
+    {#if error}
+      <p class="error">Format file must be heic</p>
+    {/if}
+
+    <button
+      type="submit"
+      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-3"
+      >Convert</button
+    >
+  </form>
+
+  <div class="mt-[10%]"></div>
 </div>
 
 <style lang="postcss">
+  .error {
+    color: red;
+  }
 </style>
