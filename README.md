@@ -1,29 +1,7 @@
-# Rsbuild Project
 
-## Setup
-
-Install the dependencies:
-
-```bash
-pnpm install
+Open terminal and run this command at workspace
 ```
-
-## Get Started
-
-Start the dev server:
-
-```bash
-pnpm dev
-```
-
-Build the app for production:
-
-```bash
-pnpm build
-```
-
-Preview the production build locally:
-
-```bash
-pnpm preview
+bun install
+bun run build
+bun run server/server.mjs
 ```

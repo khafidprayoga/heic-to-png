@@ -35,13 +35,14 @@
 
     loading = true; // Start loading spinner
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
       const response = await fetch('/upload', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'File-Name': file.name,
+        },
+        body: file,
       });
 
       if (response.ok) {
@@ -89,8 +90,7 @@
     <button
       type="submit"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-3"
-      disabled={loading || !file}
-      >Convert</button
+      disabled={loading || !file}>Convert</button
     >
     {#if loading}
       <div class="spinner mx-auto"></div>
