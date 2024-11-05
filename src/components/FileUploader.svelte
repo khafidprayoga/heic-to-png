@@ -1,11 +1,15 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
+  // State variables
+  let loading = false;
+  let result: string | null = null;
+
   const dispatch = createEventDispatcher();
   let file: File | null = null;
   let error = '';
 
-  function handleSubbmit(event) {
+  async function handleSubbmit(event) {
     // Reset the error message
     error = '';
 
@@ -27,6 +31,29 @@
     if (file.size > maxSize) {
       error = 'File size must be 1MB or less.';
       return;
+    }
+
+    loading = true; // Start loading spinner
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        result = `File uploaded successfully.. CID: ${data.cid} and the url is ${data.url}`;
+      } else {
+        result = 'Failed to upload file.';
+      }
+    } catch (error) {
+      result = 'An error occurred while uploading the file.';
+    } finally {
+      loading = false; // Stop loading spinner
     }
 
     // Dispatch the file data to a parent component or handle as needed
@@ -62,15 +89,38 @@
     <button
       type="submit"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-3"
+      disabled={loading || !file}
       >Convert</button
     >
+    {#if loading}
+      <div class="spinner mx-auto"></div>
+    {/if}
   </form>
 
-  <div class="mt-[10%]"></div>
+  <div class="mt-[10%]">
+    {#if result}
+      <p>{result}</p>
+    {/if}
+  </div>
 </div>
 
 <style lang="postcss">
   .error {
     color: red;
+  }
+
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #4caf50;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
