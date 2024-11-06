@@ -86,9 +86,9 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
         // send response data back to frontend
         return res.json({
           message: 'File uploaded successfully!',
-          filePath: pngOutputPath,
+          filePath: result.name,
           cid: result.cid,
-          url: "https://ipfsio.ioasdas/asdsad/a",
+          url: `https://cdn.dragon.cere.network/${result.bucketId}/${result.cid}`,
         });
 
       } catch (e) {
