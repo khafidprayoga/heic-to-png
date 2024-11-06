@@ -4,6 +4,7 @@ import fs from 'fs/promises';
 import { createWriteStream } from 'fs';
 import compression from 'compression';
 import { initServer } from './init';
+import { convertHEICtoPNG } from './image';
 
 
 // init express app
@@ -11,7 +12,7 @@ const app = express();
 const PORT: string | 3000 = process.env.PORT || 3000;
 
 // Serve static files from the dist directory
-const __dirname:string = path.resolve(path.dirname(''));
+const __dirname: string = path.resolve(path.dirname(''));
 app.use(express.static(path.join(__dirname, 'dist/')));
 
 
@@ -33,11 +34,18 @@ await fs.mkdir(compressedDir, { recursive: true });
 // Handle file uploads at /upload
 app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb' }), async (req, res) => {
   try {
-    const fileName = req.headers['file-name']; // Expecting the file name from the client
+    let fileName = req.headers['file-name']; // Expecting the file name from the client
     if (!fileName) {
       return res.status(400).send('No file name provided.');
     }
 
+    // check extensions
+    const fileExt = path.extname(fileName).toLowerCase();
+    if (fileExt != ".heic") {
+      return res.status(400).send('Must be heic file.');
+    }
+
+    fileName = `${+new Date()}-${fileName}`
     const uploadedFilePath = path.join(uploadDir, fileName);
     const writeStream = createWriteStream(uploadedFilePath);
 
@@ -46,27 +54,40 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
     writeStream.end();
 
     writeStream.on('finish', async () => {
-      const compressedFilePath = path.join(compressedDir, fileName);
 
-      // Here, you can add code to handle compression if needed
-      // For this example, we're just copying the uploaded file
-      await fs.copyFile(uploadedFilePath, compressedFilePath);
+      // prepare convert and set output path
+      const pngOutputPath: string = path.format({
+        dir: compressedDir,
+        name: path.basename(uploadedFilePath, fileExt),
+        ext: '.png',
+      })
 
-      res.json({
+
+      // compressing
+      try{
+        const compressed: Boolean = await convertHEICtoPNG(uploadedFilePath, pngOutputPath)
+        if (!compressed) {
+          return res.status(500).send('error at convert heic to png');
+        }
+  
+      }catch(e){
+        return res.status(500).send(`error ${e}`);
+      }
+     
+
+      return res.json({
         message: 'File uploaded successfully!',
-        filePath: compressedFilePath,
+        filePath: pngOutputPath,
         cid: '6x0asdsadsad',
-        url: "https://ipfsio.ioasdas/asdsad/a"
+        url: "https://ipfsio.ioasdas/asdsad/a",
       });
     });
 
     writeStream.on('error', (err) => {
-      console.error(err);
-      res.status(500).send('File upload failed.');
+      return res.status(500).send('File upload failed.');
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error during file upload.');
+    return res.status(500).send('Server error during file upload.');
   }
 });
 
