@@ -13,3 +13,7 @@ dist/
 .idea
 compressed/
 uploads/
+server/compressed
+server/uploads
+server/.env
+server/wallet.json
