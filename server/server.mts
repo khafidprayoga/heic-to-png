@@ -82,6 +82,7 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
         clientInstance.connect()
         const result: FileUri = await clientInstance.store(BigInt(config.env.CERE_BUCKET_ID), image)
 
+        console.log(result)
         // send response data back to frontend
         return res.json({
           message: 'File uploaded successfully!',
