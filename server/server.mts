@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs/promises';
+import fsSync from "fs";
 import { createWriteStream } from 'fs';
 import compression from 'compression';
 import { initServer } from './init';
@@ -71,6 +72,18 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
         if (!compressed) {
           return res.status(500).send('error at convert heic to png');
         }
+
+        const fileStats = fsSync.statSync(pngOutputPath);
+        const fileStream = fsSync.createReadStream(pngOutputPath);
+        
+        const file = new File(fileStream, { 
+            size: fileStats.size,
+            metadata: {
+                originalName: path.basename(pngOutputPath),
+                timestamp: Date.now(),
+                type: 'image/png'
+            }
+        });
 
         // readFile
         const fileBuffer = await fs.readFile(pngOutputPath)

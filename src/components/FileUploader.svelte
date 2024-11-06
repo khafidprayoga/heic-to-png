@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
   let file: File | null = null;
   let error = '';
+  let urlImage = '';
 
   async function handleSubbmit(event) {
     // Reset the error message
@@ -47,7 +48,8 @@
 
       if (response.ok) {
         const data = await response.json();
-        result = `File uploaded successfully.. CID: ${data.cid} and the url is ${data.url}`;
+        result = `File uploaded successfully.. CID: ${data.cid} and the url is `;
+        urlImage = data.url;
       } else {
         result = 'Failed to upload file.';
       }
@@ -90,7 +92,7 @@
     <button
       type="submit"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-3"
-      disabled={loading || !file}>Convert</button
+      disabled={(loading && !!file) || !file}>Convert</button
     >
     {#if loading}
       <div class="spinner mx-auto"></div>
@@ -99,7 +101,7 @@
 
   <div class="mt-[10%]">
     {#if result}
-      <p>{result}</p>
+    <p>{result} <a href={urlImage} target="_blank" rel="noopener noreferrer" >{urlImage}</a></p>
     {/if}
   </div>
 </div>
@@ -122,5 +124,8 @@
     to {
       transform: rotate(360deg);
     }
+  }
+  a {
+    @apply text-blue-500 hover:text-blue-700 underline hover:underline-offset-4;
   }
 </style>
