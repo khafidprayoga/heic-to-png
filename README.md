@@ -43,3 +43,9 @@ bun run server/server.mts yourpassphrase
 ```
 
 Replace `yourpassphrase` when running server, because it use to decode the encoded wallet.json data 
+
+## Proof
+![Image Proof](proof/image.png)
+```
+File uploaded successfully.. CID: baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle and the url is https://cdn.dragon.cere.network/1068/baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle
+```
