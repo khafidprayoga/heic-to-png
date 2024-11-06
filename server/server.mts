@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs/promises';
-import fsSync from "fs";
 import { createWriteStream } from 'fs';
 import compression from 'compression';
 import { initServer } from './init';
@@ -73,29 +72,20 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
           return res.status(500).send('error at convert heic to png');
         }
 
-        const fileStats = fsSync.statSync(pngOutputPath);
-        const fileStream = fsSync.createReadStream(pngOutputPath);
-        
-        const file = new File(fileStream, { 
-            size: fileStats.size,
-            metadata: {
-                originalName: path.basename(pngOutputPath),
-                timestamp: Date.now(),
-                type: 'image/png'
-            }
-        });
 
         // readFile
         const fileBuffer = await fs.readFile(pngOutputPath)
         const image: File = new File(fileBuffer, {
           size: fileBuffer.byteLength
-        });
+        })
 
         // ping
         clientInstance.connect()
-        const result: FileUri = await clientInstance.store(BigInt(config.env.CERE_BUCKET_ID), image)
 
-        console.log(result)
+        // upload
+        const result: FileUri = await clientInstance.store(BigInt(config.env.CERE_BUCKET_ID), image)
+        console.log(`new content with CID ${result.cid} stored in bucket ${result.bucketId}`)
+
         // send response data back to frontend
         return res.json({
           message: 'File uploaded successfully!',
