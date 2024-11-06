@@ -5,6 +5,7 @@ import { createWriteStream } from 'fs';
 import compression from 'compression';
 import { initServer } from './init';
 import { convertHEICtoPNG } from './image';
+import { initStorageClient } from './client';
 
 
 // init express app
@@ -15,10 +16,10 @@ const PORT: string | 3000 = process.env.PORT || 3000;
 const __dirname: string = path.resolve(path.dirname(''));
 app.use(express.static(path.join(__dirname, 'dist/')));
 
-
 // init server
 // - read wallet credentials and parse secret from args
-initServer(__dirname);
+const config = await initServer(__dirname);
+initStorageClient(config.keyring, config.creds)
 
 
 // Middleware to compress responses
@@ -64,16 +65,16 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
 
 
       // compressing
-      try{
+      try {
         const compressed: Boolean = await convertHEICtoPNG(uploadedFilePath, pngOutputPath)
         if (!compressed) {
           return res.status(500).send('error at convert heic to png');
         }
-  
-      }catch(e){
+
+      } catch (e) {
         return res.status(500).send(`error ${e}`);
       }
-     
+
 
       return res.json({
         message: 'File uploaded successfully!',

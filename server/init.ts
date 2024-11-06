@@ -1,9 +1,10 @@
 import path from 'path';
 import fs from 'fs/promises';
-import { WalletCredentials } from './types';
+import { KeyringPair$Json } from '@polkadot/keyring/types';
+import { InitServerData, WalletCredentials } from './types';
 
 // initServer function to read wallet credentials and parse secret from args
-export async function initServer(dirname: string) : Promise<WalletCredentials> {
+export async function initServer(dirname: string) : Promise<InitServerData> {
     // parsing the wallet.jsoon file and reading the content
     const credsFile = process.env.WALLET_CREDS;
     if (!credsFile) {
@@ -23,5 +24,12 @@ export async function initServer(dirname: string) : Promise<WalletCredentials> {
 
     // set secret key from flag args to typed object
     walletData.secret =  walletSecretKeyArgs
-    return walletData
+    walletData.credsFileLocation = walletCreds
+    
+    const result: InitServerData =  {
+        creds: walletData,
+        keyring: data as unknown as  KeyringPair$Json,
+    }
+
+    return  result
 }

@@ -11,6 +11,7 @@
     "svelte-check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "@cere-ddc-sdk/ddc-client": "^2.13.0",
     "compression": "^1.7.5",
     "express": "^4.21.1",
     "heic-convert": "^2.1.0",
@@ -24,6 +25,7 @@
     "@rsbuild/plugin-image-compress": "^1.0.2",
     "@rsbuild/plugin-svelte": "^1.0.1",
     "@selemondev/svelte-marquee": "^0.0.2",
+    "@types/express": "^5.0.0",
     "@types/heic-convert": "^2.1.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.9.0",
