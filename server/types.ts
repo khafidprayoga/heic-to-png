@@ -1,4 +1,3 @@
-import { KeyringPair$Json } from '@polkadot/keyring/types';
 
 export interface WalletCredentials{
     encoded:string;
@@ -14,6 +13,14 @@ export interface WalletCredentials{
 }
 
 export interface InitServerData {
-    keyring: KeyringPair$Json,
-    creds: WalletCredentials
+    keyring: string;
+    creds: WalletCredentials;
+    env: Environ;
+}
+
+export interface Environ{
+    WALLET_CREDS: string;
+    CERE_BUCKET_ID: number;
+    CERE_CLUSTER_ID: string;
+    CERE_FOLDER: string;
 }

@@ -25,6 +25,7 @@
     "@rsbuild/plugin-image-compress": "^1.0.2",
     "@rsbuild/plugin-svelte": "^1.0.1",
     "@selemondev/svelte-marquee": "^0.0.2",
+    "@types/compression": "^1.7.5",
     "@types/express": "^5.0.0",
     "@types/heic-convert": "^2.1.0",
     "@types/js-cookie": "^3.0.6",

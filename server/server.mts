@@ -7,6 +7,7 @@ import { initServer } from './init';
 import { convertHEICtoPNG } from './image';
 import { initStorageClient } from './client';
 
+import { File, FileUri } from "@cere-ddc-sdk/ddc-client";
 
 // init express app
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'dist/')));
 // init server
 // - read wallet credentials and parse secret from args
 const config = await initServer(__dirname);
-initStorageClient(config.keyring, config.creds)
+const clientInstance = await initStorageClient(config.keyring, config.creds, config.env)
 
 
 // Middleware to compress responses
@@ -33,7 +34,7 @@ await fs.mkdir(uploadDir, { recursive: true });
 await fs.mkdir(compressedDir, { recursive: true });
 
 // Handle file uploads at /upload
-app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb' }), async (req, res) => {
+app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb' }), async (req: any, res: any) => {
   try {
     let fileName = req.headers['file-name']; // Expecting the file name from the client
     if (!fileName) {
@@ -71,17 +72,28 @@ app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb'
           return res.status(500).send('error at convert heic to png');
         }
 
+        // readFile
+        const fileBuffer = await fs.readFile(pngOutputPath)
+        const image: File = new File(fileBuffer, {
+          size: fileBuffer.byteLength
+        });
+
+        // ping
+        clientInstance.connect()
+        const result: FileUri = await clientInstance.store(BigInt(config.env.CERE_BUCKET_ID), image)
+
+        // send response data back to frontend
+        return res.json({
+          message: 'File uploaded successfully!',
+          filePath: pngOutputPath,
+          cid: result.cid,
+          url: "https://ipfsio.ioasdas/asdsad/a",
+        });
+
       } catch (e) {
         return res.status(500).send(`error ${e}`);
       }
 
-
-      return res.json({
-        message: 'File uploaded successfully!',
-        filePath: pngOutputPath,
-        cid: '6x0asdsadsad',
-        url: "https://ipfsio.ioasdas/asdsad/a",
-      });
     });
 
     writeStream.on('error', (err) => {
