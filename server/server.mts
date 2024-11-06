@@ -3,13 +3,22 @@ import path from 'path';
 import fs from 'fs/promises';
 import { createWriteStream } from 'fs';
 import compression from 'compression';
+import { initServer } from './init';
 
+
+// init express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT: string | 3000 = process.env.PORT || 3000;
 
 // Serve static files from the dist directory
-const __dirname = path.dirname(import.meta.dir);
+const __dirname:string = path.resolve(path.dirname(''));
 app.use(express.static(path.join(__dirname, 'dist/')));
+
+
+// init server
+// - read wallet credentials and parse secret from args
+initServer(__dirname);
+
 
 // Middleware to compress responses
 app.use(compression());
@@ -22,7 +31,7 @@ await fs.mkdir(uploadDir, { recursive: true });
 await fs.mkdir(compressedDir, { recursive: true });
 
 // Handle file uploads at /upload
-app.post('/upload', express.raw({ type: 'application/octet-stream',limit: '5mb' }), async (req, res) => {
+app.post('/upload', express.raw({ type: 'application/octet-stream', limit: '5mb' }), async (req, res) => {
   try {
     const fileName = req.headers['file-name']; // Expecting the file name from the client
     if (!fileName) {
@@ -38,7 +47,7 @@ app.post('/upload', express.raw({ type: 'application/octet-stream',limit: '5mb' 
 
     writeStream.on('finish', async () => {
       const compressedFilePath = path.join(compressedDir, fileName);
-      
+
       // Here, you can add code to handle compression if needed
       // For this example, we're just copying the uploaded file
       await fs.copyFile(uploadedFilePath, compressedFilePath);
