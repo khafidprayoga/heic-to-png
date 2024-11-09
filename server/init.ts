@@ -9,6 +9,7 @@ export async function initServer(dirname: string): Promise<InitServerData> {
     CERE_BUCKET_ID: Number(process.env.CERE_BUCKET_ID) || 0,
     CERE_CLUSTER_ID: process.env.CERE_CLUSTER_ID || '',
     CERE_FOLDER: process.env.CERE_FOLDER || '',
+    CERE_SECRET: process.env.CERE_SECRET || '',
   };
 
   // parsing the wallet.jsoon file and reading the content
@@ -23,13 +24,12 @@ export async function initServer(dirname: string): Promise<InitServerData> {
 
   // read secret
   // example `bun run server/server.mts yourpasswordsecret
-  const walletSecretKeyArgs = process.argv[2];
-  if (!walletSecretKeyArgs) {
-    throw new Error('Wallet secret key is not provided');
+  if (environ.CERE_SECRET = '') {
+    throw new Error('Wallet secret key is not provided on env');
   }
 
   // set secret key from flag args to typed object
-  walletData.secret = walletSecretKeyArgs;
+  walletData.secret = environ.CERE_SECRET;
   walletData.credsFileLocation = walletCreds;
 
   const result: InitServerData = {

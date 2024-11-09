@@ -19,7 +19,7 @@ loadEnvCfg()
  * This is simply for testing purposes. If you need a secure way to host your
  * project, please reach out to us.
  */
-const LOCALTUNNEL_SUBDOMAIN = "e2f24766-5072-4ea8-afcb-37163d92e8e6"; // This is the subdomain where your webserver will be available. Eg. https://example.processor-proxy.sook.ch
+const LOCALTUNNEL_SUBDOMAIN = "8abc625d-abdd-4638-8016-582a9a492f24"; // This is the subdomain where your webserver will be available. Eg. https://example.processor-proxy.sook.ch
 const LOCALTUNNEL_HOST = "https://processor-proxy.sook.ch/";
 const LOCAL_PORT = 3000;
 

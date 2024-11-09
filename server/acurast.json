@@ -22,7 +22,7 @@
       "requiredModules": [],
       "minProcessorReputation": 0,
       "maxCostPerExecution": 100000000000,
-      "includeEnvironmentVariables": [],
+      "includeEnvironmentVariables": ["WALLET_CREDS","CERE_BUCKET_ID","CERE_SECRET"],
       "processorWhitelist": []
     }
   }

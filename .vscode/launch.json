@@ -12,13 +12,15 @@
   
         // The arguments to pass to the program, if any.
         // pass the secret of wallet json key here
-        "args": ["supersecret"],
+        "args": [""],
   
         // The working directory of the program.
         "cwd": "${workspaceFolder}/server",
   
         // The environment variables to pass to the program.
-        "env": {},
+        "env": {
+          "CERE_SECRET": "passphrase"
+        },
   
         // If the environment variables should not be inherited from the parent process.
         "strictEnv": false,

@@ -22,4 +22,5 @@ export interface Environ {
   CERE_BUCKET_ID: number;
   CERE_CLUSTER_ID: string;
   CERE_FOLDER: string;
+  CERE_SECRET: string;
 }
