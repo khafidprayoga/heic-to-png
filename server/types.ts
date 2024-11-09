@@ -7,20 +7,22 @@ export interface WalletCredentials {
   };
   address: string;
   meta: any;
-  secret: string;
-  credsFileLocation: string;
 }
 
 export interface InitServerData {
-  keyring: string;
-  creds: WalletCredentials;
   env: Environ;
+  envType: RunnerMode;
 }
 
 export interface Environ {
-  WALLET_CREDS: string;
-  CERE_BUCKET_ID: number;
-  CERE_CLUSTER_ID: string;
-  CERE_FOLDER: string;
-  CERE_SECRET: string;
+  WALLET_CREDS: string|null;
+  CERE_BUCKET_ID: number|null;
+  CERE_CLUSTER_ID: string|null;
+  CERE_FOLDER: string|null;
+  CERE_PASSPHRASE: string|null;
+}
+
+export enum RunnerMode {
+  AcurastNetwork,
+  LocalDevelopment,
 }

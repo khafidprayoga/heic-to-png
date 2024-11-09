@@ -9,7 +9,7 @@ import { convertHEICtoPNG } from './image';
 import { initStorageClient } from './client';
 import { config as loadEnvCfg } from "dotenv"
 import { File, FileUri } from '@cere-ddc-sdk/ddc-client';
-
+import { RunnerMode } from './types';
 
 loadEnvCfg()
 
@@ -24,33 +24,37 @@ const LOCALTUNNEL_HOST = "https://processor-proxy.sook.ch/";
 const LOCAL_PORT = 3000;
 
 
-
 // init express app
 const app = express();
-const PORT: string | 3000 = process.env.PORT || 3000;
+const PORT: number= 3000;
 
 // Serve static files from the dist directory
 const __dirname: string = path.resolve(path.dirname(''));
-app.use(express.static(path.join(__dirname, 'dist/frontend')));
 
 // init server
 // - read wallet credentials and parse secret from args
 const config = await initServer(__dirname);
-const clientInstance = await initStorageClient(
-  config.keyring,
-  config.creds,
-  config.env,
-);
+const clientInstance = await initStorageClient(config);
+
+const storagePath = global._STD_.job.storageDir;
+
+app.use(express.static(path.join(storagePath, 'dist/frontend')));
 
 // Middleware to compress responses
 app.use(compression());
 
 // Create directories for uploads and compressed files
-const uploadDir = path.join(__dirname, 'uploads');
-const compressedDir = path.join(__dirname, 'compressed');
+const uploadDir = path.join(storagePath, 'uploads');
+const compressedDir = path.join(storagePath, 'compressed');
 
-await fs.mkdir(uploadDir, { recursive: true });
-await fs.mkdir(compressedDir, { recursive: true });
+
+// on local create temp dir
+if (config.envType == RunnerMode.LocalDevelopment){
+  await fs.mkdir(uploadDir, { recursive: true });
+  await fs.mkdir(compressedDir, { recursive: true });
+}
+
+const processedImages = new Map<string, string>();
 
 // Handle file uploads at /upload
 app.post(
@@ -106,7 +110,7 @@ app.post(
 
           // upload
           const result: FileUri = await clientInstance.store(
-            BigInt(config.env.CERE_BUCKET_ID),
+            BigInt(config.env.CERE_BUCKET_ID!),
             image,
           );
           console.log(
@@ -117,12 +121,15 @@ app.post(
           await fs.rm(uploadedFilePath);
           await fs.rm(pngOutputPath);
 
+          const urlImg = `https://cdn.dragon.cere.network/${result.bucketId}/${result.cid}`
+          processedImages.set(result.cid, urlImg);
+
           // send response data back to frontend
           return res.json({
             message: 'File uploaded successfully!',
             filePath: result.name,
             cid: result.cid,
-            url: `https://cdn.dragon.cere.network/${result.bucketId}/${result.cid}`,
+            url: urlImg,
           });
         } catch (e) {
           return res.status(500).send(`error ${e}`);
@@ -140,7 +147,7 @@ app.post(
 
 // Catch-all route for serving the main app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/frontend', 'index.html'));
+  res.sendFile(path.join(storagePath, 'dist/frontend', 'index.html'));
 });
 
 // Start the server

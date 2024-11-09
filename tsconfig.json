@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["DOM", "ES2020"],
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
     "module": "ESNext",
     "noEmit": true,
     "strict": true,
@@ -16,15 +19,34 @@
     "allowImportingTsExtensions": true,
     "noImplicitAny": false,
     "paths": {
-      "@artwork/*": ["./src/assets/artwork/*"],
-      "@brand/*": ["./src/assets/brand/*"],
-      "@icons/*": ["./src/assets/icons/*"],
-      "@components/*": ["./src/components/*"],
-      "@store/*": ["./src/store/*"],
-      "@config/*": ["./src/config/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@artwork/*": [
+        "./src/assets/artwork/*"
+      ],
+      "@brand/*": [
+        "./src/assets/brand/*"
+      ],
+      "@icons/*": [
+        "./src/assets/icons/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@store/*": [
+        "./src/store/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ]
     }
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "server"
+  ]
 }
