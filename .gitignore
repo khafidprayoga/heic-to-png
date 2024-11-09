@@ -21,3 +21,5 @@ server/wallet.json
 # Acurast CLI
 .acurast
 .env
+server/.acurast
+server/.env

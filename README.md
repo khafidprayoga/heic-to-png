@@ -69,3 +69,32 @@ Current directory for build is `${workingspace}`
 ```
 File uploaded successfully.. CID: baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle and the url is https://cdn.dragon.cere.network/1068/baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle
 ```
+
+
+```
+➜  server git:(main) ✗ acurast deploy
+
+Deploying project "heic-to-png"
+
+Your balance is 0. Visit https://faucet.acurast.com?address=5HT7R4jFpMnvoL2vzj3EetjwJpPaySGzDwg6B5rADRH6Nn7x to get some tokens.
+
+➜  server git:(main) ✗ acurast deploy
+
+Deploying project "heic-to-png"
+
+The CLI will use the following address: 5HT7R4jFpMnvoL2vzj3EetjwJpPaySGzDwg6B5rADRH6Nn7x
+
+The deployment will be scheduled to start in 5 minutes 0 seconds. (11/9/2024, 1:45:50 PM) It will run for 1 week.
+
+There will be 1 execution with 1 replica.
+Each replica has a cost of 0.1 cACU, which means each execution will cost 0.1 cACU.
+The total cost will be 0.1 cACU.
+
+✔ Deploying project (first execution scheduled in 218s)
+  ✔ Submitted to Acurast (ipfs://QmYkRspWqZWs68i8qp6TLxe5gd3i4N3wt91Ge2ftZJo1fB)
+  ✔ Deployment registered (JobID: 5419)
+  ✔ Matched
+  ✔ Waiting for processor acknowledgements
+    ✔ Acknowledged by 1/1
+➜  server git:(main) ✗ 
+```
