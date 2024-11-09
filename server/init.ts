@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs/promises';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { InitServerData, WalletCredentials, Environ } from './types';
 
 // initServer function to read wallet credentials and parse secret from args

@@ -30,7 +30,9 @@ const Config: RsbuildConfig = {
     },
   },
   output: {
-    polyfill: 'usage',
+    distPath: {
+      root: "./server/dist/frontend"
+    }
   },
   source: {
     define: parsed,

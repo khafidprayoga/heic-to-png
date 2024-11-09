@@ -1,4 +1,5 @@
 import express from 'express';
+import localtunnel from "localtunnel"
 import path from 'path';
 import fs from 'fs/promises';
 import { createWriteStream } from 'fs';
@@ -6,8 +7,23 @@ import compression from 'compression';
 import { initServer } from './init';
 import { convertHEICtoPNG } from './image';
 import { initStorageClient } from './client';
-
+import { config as loadEnvCfg } from "dotenv"
 import { File, FileUri } from '@cere-ddc-sdk/ddc-client';
+
+
+loadEnvCfg()
+
+/**
+ * WARNING: This subdomain is NOT secure and should not be used in production.
+ * Anyone can simply overwrite it with their own project and hijack requests
+ * This is simply for testing purposes. If you need a secure way to host your
+ * project, please reach out to us.
+ */
+const LOCALTUNNEL_SUBDOMAIN = "e2f24766-5072-4ea8-afcb-37163d92e8e6"; // This is the subdomain where your webserver will be available. Eg. https://example.processor-proxy.sook.ch
+const LOCALTUNNEL_HOST = "https://processor-proxy.sook.ch/";
+const LOCAL_PORT = 3000;
+
+
 
 // init express app
 const app = express();
@@ -15,7 +31,7 @@ const PORT: string | 3000 = process.env.PORT || 3000;
 
 // Serve static files from the dist directory
 const __dirname: string = path.resolve(path.dirname(''));
-app.use(express.static(path.join(__dirname, 'dist/')));
+app.use(express.static(path.join(__dirname, 'dist/frontend')));
 
 // init server
 // - read wallet credentials and parse secret from args
@@ -124,10 +140,22 @@ app.post(
 
 // Catch-all route for serving the main app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist/frontend', 'index.html'));
 });
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+const startTunnel = async () => {
+  const tunnel = await localtunnel({
+    subdomain: LOCALTUNNEL_SUBDOMAIN,
+    host: LOCALTUNNEL_HOST,
+    port: LOCAL_PORT,
+  });
+
+  console.log("Tunnel started at", tunnel.url);
+};
+
+startTunnel();

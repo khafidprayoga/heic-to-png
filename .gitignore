@@ -17,3 +17,7 @@ server/compressed
 server/uploads
 server/.env
 server/wallet.json
+
+# Acurast CLI
+.acurast
+.env

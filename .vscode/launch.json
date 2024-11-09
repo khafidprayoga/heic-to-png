@@ -15,7 +15,7 @@
         "args": ["supersecret"],
   
         // The working directory of the program.
-        "cwd": "${workspaceFolder}",
+        "cwd": "${workspaceFolder}/server",
   
         // The environment variables to pass to the program.
         "env": {},

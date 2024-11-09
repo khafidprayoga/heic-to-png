@@ -28,18 +28,20 @@ Cere Network DDC SDK: https://github.com/Cerebellum-Network/cere-ddc-sdk-js
    - wallet.json , from exported wallet data from cere
    - .env , adjust the env
 2. Install Bun runtime for Node.js https://bun.sh/docs/installation
-3. Run this command on shell at workspace project
+3. Run this command on shell
 
 ```
-# installing package
+# installing package (run this at workspace)
 bun install
 
-# building frontend to interact with backend
+# building frontend to interact with backend (run this at workspace)
 bun run build
 
-# run server to render frontend and start endpoint `/upload` to process the file to blockchain
+# change context of current working dir
+cd ./server
 
-bun run server/server.mts yourpassphrase
+# run server to render frontend and start endpoint `/upload` to process the file to blockchain
+bun run ./server.mts yourpassphrase
 ```
 
 Replace `yourpassphrase` when running server, because it use to decode the encoded wallet.json data
@@ -49,6 +51,16 @@ Replace `yourpassphrase` when running server, because it use to decode the encod
 1. Install extension on vscode marketplace "Bun for Visual Studio Code"
 2. Open the `.vscode/launch.json`
 3. Set your wallet secret replace `supersecret` with your passphrase at `args` object at debugger launch.json
+4. Open `server.mts` file and run the debugger
+
+
+## Build for Production
+Current directory for build is `${workingspace}`
+1. Make sure you have build the frontend, or you can run `bun run build`
+2. Bundle the server code to single entrypoint Node.js app with `bun run build-server`
+3. Change directory to `${workspace}/server`
+4. Adjust the `wallet.json` and `.env`
+5. Run at the `server` directory `node dist/server.js yourpassphrase` 
 
 ## Proof
 
