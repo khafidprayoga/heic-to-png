@@ -1,4 +1,5 @@
 # About
+
 Summary: a very simple bounty that combines the Acurast image conversion use-case with Cere Network's image storage use-case, in which a HEIC file is converted to a PNG. Using fully decentralized storage & compute.
 
 Expected result:
@@ -11,27 +12,26 @@ Expected result:
 6. Write the output (a new PNG file) to your bucket
 7. Present the user with a download/share link for his new PNG file
 
-
 ## Resources
 
-Developer console: https://developer.console.cere.network/  
+Developer console: https://developer.console.cere.network/
 
-Acurast Image Conversion Repo: https://github.com/Acurast/acurast-example-apps/blob/main/apps/app-heic-to-png/src/index.ts  
+Acurast Image Conversion Repo: https://github.com/Acurast/acurast-example-apps/blob/main/apps/app-heic-to-png/src/index.ts
 
-Cere Network DDC example: https://github.com/Cerebellum-Network/cere-ddc-sdk-js/tree/main/examples  
+Cere Network DDC example: https://github.com/Cerebellum-Network/cere-ddc-sdk-js/tree/main/examples
 
-Cere Network DDC SDK: https://github.com/Cerebellum-Network/cere-ddc-sdk-js  
-
+Cere Network DDC SDK: https://github.com/Cerebellum-Network/cere-ddc-sdk-js
 
 ## How to Run
 
 1. Setup the credentials
-    - wallet.json , from exported wallet data from cere
-    - .env , adjust the env
-2. Install Bun runtime for Node.js https://bun.sh/docs/installation 
+   - wallet.json , from exported wallet data from cere
+   - .env , adjust the env
+2. Install Bun runtime for Node.js https://bun.sh/docs/installation
 3. Run this command on shell at workspace project
+
 ```
-# installing package 
+# installing package
 bun install
 
 # building frontend to interact with backend
@@ -42,15 +42,18 @@ bun run build
 bun run server/server.mts yourpassphrase
 ```
 
-Replace `yourpassphrase` when running server, because it use to decode the encoded wallet.json data 
+Replace `yourpassphrase` when running server, because it use to decode the encoded wallet.json data
 
 ## How to Debug
+
 1. Install extension on vscode marketplace "Bun for Visual Studio Code"
 2. Open the `.vscode/launch.json`
 3. Set your wallet secret replace `supersecret` with your passphrase at `args` object at debugger launch.json
 
 ## Proof
+
 ![Image Proof](proof/image.png)
+
 ```
 File uploaded successfully.. CID: baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle and the url is https://cdn.dragon.cere.network/1068/baebb4igv2oxxjh3irgnguuvn5ogh4wjhzgoezg4jkw2yz35o6o3wfvrhle
 ```

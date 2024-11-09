@@ -54,7 +54,7 @@
         result = 'Failed to upload file.';
       }
     } catch (error) {
-      result = 'An error occurred while uploading the file.';
+      result = `An error occurred while uploading the file. ${error}`;
     } finally {
       loading = false; // Stop loading spinner
     }
