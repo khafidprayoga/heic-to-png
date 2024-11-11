@@ -10,7 +10,7 @@
   let error = '';
   let urlImage = '';
 
-  async function handleSubbmit(event) {
+  async function handleSubmit(event) {
     // Reset the error message
     error = '';
 
@@ -37,7 +37,7 @@
     loading = true; // Start loading spinner
 
     try {
-      const response = await fetch('/upload', {
+      const response = await fetch('https://8abc625d-abdd-4638-8016-582a9a492f24.processor-proxy.sook.ch/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/octet-stream',
@@ -48,7 +48,7 @@
 
       if (response.ok) {
         const data = await response.json();
-        result = `File uploaded successfully.. CID: ${data.cid} and the url is `;
+        result = `File uploaded successfully.. CID: ${data.cid}, powered by Acurast JobID at ${data.jobId}, and the url is `;
         urlImage = data.url;
       } else {
         result = 'Failed to upload file.';
@@ -74,7 +74,7 @@
 -->
 
 <div>
-  <form on:submit|preventDefault={handleSubbmit}>
+  <form on:submit|preventDefault={handleSubmit}>
     <label
       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       for="file_input">Upload file</label

@@ -27,7 +27,10 @@ const Config: RsbuildConfig = {
   },
   output: {
     distPath: {
-      root: "./server/dist/frontend"
+      root: "dist"
+    },
+    sourceMap:{
+      js: "source-map"
     }
   },
   source: {
