@@ -38,7 +38,9 @@ const clientInstance = await initStorageClient(config);
 
 const storagePath = global._STD_.job.storageDir;
 
-app.use(express.static(path.join(storagePath, 'dist/frontend')));
+if (config.envType == RunnerMode.LocalDevelopment){
+  app.use(express.static(path.join(storagePath, '../dist/')));
+}
 
 // Middleware to compress responses
 app.use(compression());
@@ -130,6 +132,7 @@ app.post(
             filePath: result.name,
             cid: result.cid,
             url: urlImg,
+            jobId: global._STD_.job.getId(),
           });
         } catch (e) {
           return res.status(500).send(`error ${e}`);
@@ -145,9 +148,15 @@ app.post(
   },
 );
 
+
 // Catch-all route for serving the main app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(storagePath, 'dist/frontend', 'index.html'));
+  if (config.envType === RunnerMode.LocalDevelopment) {
+    res.sendFile(path.join(storagePath, '../dist/', 'index.html'));
+  }
+
+  // if production build redirect to static web on render
+  return res.redirect(301, "https://cere.khafidprayoga.my.id");
 });
 
 // Start the server
