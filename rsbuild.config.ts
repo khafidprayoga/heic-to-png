@@ -15,19 +15,15 @@ const Config: RsbuildConfig = {
   plugins: [pluginSvelte(svelteConfig), pluginImageCompress(['png', 'svg'])],
   html: {
     title: 'HEIC to PNG Image Converter',
-    favicon: './public/favicon.png',
     meta: {
       description:
         'Decentralized Image converter for HEIC to PNG with Acurast and Cere Network',
     },
   },
-  performance: {
-    chunkSplit: {
-      strategy: 'split-by-experience',
-      forceSplitting: {
-        axios: /node_modules[\\/]axios/,
-      },
-    },
+  performance:{
+   chunkSplit: {
+    strategy: "all-in-one",
+   }
   },
   output: {
     distPath: {
